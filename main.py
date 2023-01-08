@@ -6,24 +6,11 @@ from sites import *
 # 7.22084s - one card
 def top_cards_from_each(card_name):
     all_cards = list()
-    cardshop = get_cardshop_tolaria(card_name)
-    if len(cardshop) != 0:
-        all_cards.append(sorted(cardshop, key=lambda i: i['price'])[0])
-    sentry = get_sentry_box(card_name)
-    if len(sentry) != 0:
-        all_cards.append(sorted(sentry, key=lambda i: i['price'])[0])
-    face = get_face_to_face(card_name)
-    if len(face) != 0:
-        all_cards.append(sorted(face, key=lambda i: i['price'])[0])
-    er = get_er_games(card_name)
-    if len(er) != 0:
-        all_cards.append(sorted(er, key=lambda i: i['price'])[0])
-    wizard = get_wizard_tower(card_name)
-    if len(wizard) != 0:
-        all_cards.append(sorted(wizard, key=lambda i: i['price'])[0])
-    kessel = get_kessel_run_games(card_name)
-    if len(kessel) != 0:
-        all_cards.append(sorted(kessel, key=lambda i: i['price'])[0])
+    store_list = [get_cardshop_tolaria, get_sentry_box, get_face_to_face, get_er_games, get_wizard_tower, get_kessel_run_games, get_four_o_one]
+    for store in store_list:
+        cards = store(card_name)
+        if len(cards) != 0:
+            all_cards.append(sorted(cards, key=lambda i: i['price'])[0])
     all_cards = sorted(all_cards, key=lambda i: i['price'])
     return all_cards
 
@@ -36,7 +23,7 @@ def top_card_thread_method(func, card_name):
 
 # 2.940s
 def top_cards_from_each_multi(card_name):
-    store_list = [get_cardshop_tolaria, get_sentry_box, get_face_to_face, get_er_games, get_wizard_tower, get_kessel_run_games]
+    store_list = [get_cardshop_tolaria, get_sentry_box, get_face_to_face, get_er_games, get_wizard_tower, get_kessel_run_games, get_four_o_one]
     all_cards = list()
     with Pool(processes=4) as pool:
         multiple_results = [pool.apply_async(top_card_thread_method, (store, card_name)) for store in store_list]
