@@ -1,2 +1,3 @@
 .DS_Store
 found_cards.csv
+__pycache__
