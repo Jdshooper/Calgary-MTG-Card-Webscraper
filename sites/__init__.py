@@ -6,3 +6,4 @@ from .er_games import *
 from .kessel_run_games import *
 from .wizard_tower import *
 from .four_o_one_games import *
+from .ogres_den import *
