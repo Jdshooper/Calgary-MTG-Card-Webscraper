@@ -6,8 +6,7 @@ from sites import *
 # 7.22084s - one card
 def top_cards_from_each(card_name):
     all_cards = list()
-    store_list = [get_cardshop_tolaria, get_sentry_box, get_face_to_face, get_er_games, get_wizard_tower, get_kessel_run_games, get_four_o_one]
-    # WIP store_list = [get_ogres_den]
+    store_list = [get_cardshop_tolaria, get_sentry_box, get_face_to_face, get_er_games, get_wizard_tower, get_kessel_run_games, get_four_o_one, get_ogres_den]
     for store in store_list:
         cards = store(card_name)
         if len(cards) != 0:
@@ -39,7 +38,9 @@ def top_cards_from_each_multi(card_name):
 def read_card_list(file_name):
     f = open(file_name, "r")
     str = f.read()
-    return str.split('\n')
+    cards = str.split('\n')
+    cards.pop() # last newline
+    return cards
 
 def write_results(file_name, cards):
     f = open(file_name, "a")
