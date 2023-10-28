@@ -1,12 +1,11 @@
 import time
 from multiprocessing import Pool
-import json
 from sites import *
 
 # 7.22084s - one card
 def top_cards_from_each(card_name):
     all_cards = list()
-    store_list = [get_cardshop_tolaria, get_sentry_box, get_face_to_face, get_er_games, get_wizard_tower, get_kessel_run_games, get_four_o_one]
+    store_list = [get_sentry_box, get_face_to_face, get_er_games, get_wizard_tower, get_kessel_run_games, get_four_o_one]
     for store in store_list:
         cards = store(card_name)
         if len(cards) != 0:
@@ -23,7 +22,7 @@ def top_card_thread_method(func, card_name):
 
 # 2.940s
 def top_cards_from_each_multi(card_name):
-    store_list = [get_cardshop_tolaria, get_sentry_box, get_face_to_face, get_er_games, get_wizard_tower, get_kessel_run_games, get_four_o_one]
+    store_list = [get_sentry_box, get_face_to_face, get_er_games, get_wizard_tower, get_kessel_run_games, get_four_o_one]
     all_cards = list()
     with Pool(processes=4) as pool:
         multiple_results = [pool.apply_async(top_card_thread_method, (store, card_name)) for store in store_list]
