@@ -1,36 +1,5 @@
-from multiprocessing.pool import ThreadPool
-from multiprocessing import cpu_count
-from sites import *
-
-def top_cards_from_each(card_name):
-    all_cards = list()
-    store_list = [get_sentry_box, get_face_to_face, get_er_games, get_wizard_tower, get_kessel_run_games, get_four_o_one]
-    for store in store_list:
-        cards = store(card_name)
-        if len(cards) != 0:
-            all_cards.append(sorted(cards, key=lambda i: i['price'])[0])
-    all_cards = sorted(all_cards, key=lambda i: i['price'])
-    return all_cards
-
-def top_card_thread_method(func, card_name):
-    results = []
-    result = func(card_name)
-    if len(result) != 0:
-        results.append(sorted(result, key=lambda i: i['price'])[0])
-    return results
-
-def top_cards_from_each_multi(card_name):
-    store_list = [get_sentry_box, get_face_to_face, get_er_games, get_wizard_tower, get_kessel_run_games, get_four_o_one]
-    all_cards = list()
-    with ThreadPool(processes=cpu_count()) as pool:
-        multiple_results = [pool.apply_async(top_card_thread_method, (store, card_name)) for store in store_list]
-        for result in multiple_results:
-            try:
-                all_cards += result.get(timeout=10)
-            except TimeoutError:
-                print("We lacked patience and got a multiprocessing.TimeoutError")
-    all_cards = sorted(all_cards, key=lambda i: i['price'])
-    return all_cards
+from webscrape import top_cards_from_each_multi
+from webscrape import top_cards_from_each
 
 def read_card_list(file_name):
     f = open(file_name, "r")
@@ -81,10 +50,12 @@ if __name__ == '__main__':
     # Possible other store addition: https://www.ebay.ca/str/4thdimensiongames
     file = "cards_list.txt"
     card_list = read_card_list(file)
-    # card_list = ["Balduvian Bears"]
     final_list = list()
     for card in card_list:
+        # Legacy for if multithreading isn't working:
         # final_list.append(top_cards_from_each(card))
+        # 33.024s - Non-threaded (5 cards)
+        # 15.430s - Threaded (5 cards)
         final_list.append(top_cards_from_each_multi(card))
 
     # for item in final_list:
@@ -94,5 +65,3 @@ if __name__ == '__main__':
 
     write_results("found_cards.csv", final_list)
 
-    # 33.024s - Non-threaded (5 cards)
-    # 15.430s - Threaded (5 cards)
