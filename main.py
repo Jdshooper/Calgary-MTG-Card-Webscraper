@@ -1,5 +1,5 @@
-import time
-from multiprocessing import Pool
+from multiprocessing.pool import ThreadPool
+from multiprocessing import cpu_count
 from sites import *
 
 # 7.22084s - one card
@@ -24,7 +24,7 @@ def top_card_thread_method(func, card_name):
 def top_cards_from_each_multi(card_name):
     store_list = [get_sentry_box, get_face_to_face, get_er_games, get_wizard_tower, get_kessel_run_games, get_four_o_one]
     all_cards = list()
-    with Pool(processes=4) as pool:
+    with ThreadPool(processes=cpu_count()) as pool:
         multiple_results = [pool.apply_async(top_card_thread_method, (store, card_name)) for store in store_list]
         for result in multiple_results:
             try:
@@ -86,8 +86,8 @@ if __name__ == '__main__':
     # card_list = ["Balduvian Bears"]
     final_list = list()
     for card in card_list:
-        final_list.append(top_cards_from_each(card))
-        # final_list.append(top_cards_from_each_multi(card))
+        # final_list.append(top_cards_from_each(card))
+        final_list.append(top_cards_from_each_multi(card))
 
     # for item in final_list:
     #     print(item)
@@ -96,5 +96,5 @@ if __name__ == '__main__':
 
     write_results("found_cards.csv", final_list)
 
-    # 526.794s - Non-threaded
-    # 143.513s - Threaded
+    # 33.024s - Non-threaded (5 cards)
+    # 15.430s - Threaded (5 cards)
