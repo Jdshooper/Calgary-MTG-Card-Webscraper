@@ -2,7 +2,6 @@ from multiprocessing.pool import ThreadPool
 from multiprocessing import cpu_count
 from sites import *
 
-# 7.22084s - one card
 def top_cards_from_each(card_name):
     all_cards = list()
     store_list = [get_sentry_box, get_face_to_face, get_er_games, get_wizard_tower, get_kessel_run_games, get_four_o_one]
@@ -20,7 +19,6 @@ def top_card_thread_method(func, card_name):
         results.append(sorted(result, key=lambda i: i['price'])[0])
     return results
 
-# 2.940s
 def top_cards_from_each_multi(card_name):
     store_list = [get_sentry_box, get_face_to_face, get_er_games, get_wizard_tower, get_kessel_run_games, get_four_o_one]
     all_cards = list()
@@ -60,7 +58,7 @@ def write_optimal_results(file_name, cards):
 
 
 def process_optimal_price(cards):
-    calgary_list = ["cardshop", "sentry", "er"]
+    calgary_list = ["sentry", "er"]
     sorted_cards = sorted(cards, key=lambda i: i[0]['store'])
     best_list = list()
     for card in sorted_cards:

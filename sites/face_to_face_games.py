@@ -55,6 +55,10 @@ def api_call(card_name):
             condition_price = float(condition["child_price_retail"][0])
             if condition_price < price:
                 price = condition_price
+
+            condition_sale_price = float(condition["child_price_sale"][0])
+            if condition_sale_price != 0 and condition_sale_price < price:
+                price = condition_sale_price
         
         cards.append({
             "name": card_name,
