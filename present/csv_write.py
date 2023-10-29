@@ -1,6 +1,7 @@
 def write_results(file_name, cards):
     f = open(file_name, "a")
     for options in cards:
+        f.write("\"" + options[0]['name'] + "\",")
         for option in options:
             f.write(str(option['price']) + "," + option['link'] + ",")
         f.write("\n")

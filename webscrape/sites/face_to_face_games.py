@@ -44,6 +44,9 @@ def api_call(card_name):
         if "Art Series" in info["true set"][0]:
             continue
 
+        if card_name.lower() not in info["card name"][0].lower():
+            continue
+
         link = info["url_detail"][0]
         stock = 0
         price = 9999999
